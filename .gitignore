@@ -18,3 +18,18 @@ composer.lock
 # Logs / temp
 *.log
 .tmp/
+
+# --- Local development / test infrastructure (not part of the plugin) ---
+docker-compose.glpi10.yml
+docker-compose.glpi11.yml
+docker/
+test-plugin.ps1
+scripts/
+tests/
+phpunit.xml.dist
+.env.example
+
+# --- Project planning / documentation of the development process ---
+especificacoes.md
+PLAN.md
+prompt.md
