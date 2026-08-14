@@ -1,0 +1,77 @@
+diff --git a/inc/fields.class.php b/inc/fields.class.php
+index 1111111..2222222 100644
+--- a/inc/fields.class.php
++++ b/inc/fields.class.php
+@@ -62,10 +62,19 @@ class PluginFormcreatorFields
+       foreach (glob(dirname(__FILE__).'/field/*field.class.php') as $class_file) {
+          $matches = null;
+          preg_match("#field/(.+)field\.class.php$#", $class_file, $matches);
+ 
+          if (PluginFormcreatorFields::fieldTypeExists($matches[1])) {
+             $tab_field_types[strtolower($matches[1])] = $class_file;
+          }
+       }
+ 
++      // BEGIN dynamicfields: merge external question types registered via hook
++      foreach (PluginFormcreatorFields::getExternalTypes() as $ext_type => $ext_data) {
++         $tab_field_types[$ext_type] = $ext_data['file'] ?? $ext_data['classname'];
++      }
++      // END dynamicfields
++
+       return $tab_field_types;
+    }
+@@ -82,9 +91,16 @@ class PluginFormcreatorFields
+       foreach (glob(dirname(__FILE__).'/field/*field.class.php') as $class_file) {
+          $matches = null;
+          preg_match("#field/(.+)field\.class.php$#", $class_file, $matches);
+          $classname = self::getFieldClassname($matches[1]);
+          if (self::fieldTypeExists($matches[1])) {
+             $classes[strtolower($matches[1])] = $classname;
+          }
+       }
+ 
++      // BEGIN dynamicfields: merge external question types registered via hook
++      foreach (PluginFormcreatorFields::getExternalTypes() as $ext_type => $ext_data) {
++         $classes[$ext_type] = $ext_data['classname'];
++      }
++      // END dynamicfields
++
+       return $classes;
+    }
+@@ -403,7 +429,16 @@ class PluginFormcreatorFields
+      * @return string
+      */
+    public static function getFieldClassname($type) {
++      $external = PluginFormcreatorFields::getExternalTypes();
++      if (isset($external[$type])) {
++         return $external[$type]['classname'];
++      }
+       return 'GlpiPlugin\\Formcreator\\Field\\' . ucfirst($type) . 'Field';
+    }
++
++   /**
++    * Get the question types registered by other plugins through the
++    * "formcreator_get_question_types" hook (added by the dynamicfields plugin).
++    *
++    * @return array field_type => ['classname' => string, 'file' => string]
++    */
++   public static function getExternalTypes() {
++      static $types = null;
++      if ($types === null) {
++         $types = [];
++         foreach (Plugin::doHookFunction('formcreator_get_question_types', []) as $type => $data) {
++            if (!is_string($type) || $type === '') {
++               continue;
++            }
++            if (is_string($data) && class_exists($data)) {
++               $types[$type] = ['classname' => $data];
++            } else if (is_array($data) && isset($data['classname']) && class_exists($data['classname'])) {
++               $types[$type] = $data;
++            }
++         }
++      }
++      return $types;
++   }
++
+    /**
+     * checks if a field type exists

@@ -1,0 +1,44 @@
+{#
+ # ---------------------------------------------------------------------
+ #  GLPI Plugin "Campos Dinâmicos Formulário" (dynamicfields)
+ #  ---------------------------------------------------------------------
+ #  Design form of the "Campo Dinâmico" question type.
+ #
+ #  Extends the Formcreator question page. The list of attributes depends
+ #  on the source question selected in "_parameters[dynamic]..." which is
+ #  refreshed through an AJAX call when the designer changes the source
+ #  question (see js/dynamicfields.js).
+ #  ---------------------------------------------------------------------
+ #  LICENSE: GPL-2.0+
+ #  ---------------------------------------------------------------------
+#}
+{% extends "@formcreator/pages/question.html.twig" %}
+{% import 'components/form/fields_macros.html.twig' as fields %}
+{% import '@formcreator/components/form/fields_macros.html.twig' as formcreatorFields %}
+
+{% block questionFields %}
+    {{ fields.nullField({
+        label_class: 'col-xxl-4',
+        input_class: 'col-xxl-8',
+    }) }}
+
+    {{ fields.dropdownYesNo(
+        'required',
+        item.fields['required'],
+        __('Required', 'formcreator'), {
+            label_class: 'col-xxl-4',
+            input_class: 'col-xxl-8',
+        }
+    ) }}
+
+    {{ fields.nullField({
+        label_class: 'col-xxl-4',
+        input_class: 'col-xxl-8',
+    }) }}
+{% endblock %}
+
+{% block questionParameters %}
+    {% for parameter in question_params %}
+        {{ parameter.getParameterForm(item)|raw }}
+    {% endfor %}
+{% endblock %}

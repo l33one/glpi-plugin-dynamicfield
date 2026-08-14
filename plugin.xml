@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+   <name>Campos Dinâmicos Formulário</name>
+   <key>dynamicfields</key>
+   <state>stable</state>
+   <description>
+      <short>
+         <en>Dynamic field question type for Formcreator</en>
+         <pt_BR>Tipo de questão "Campo Dinâmico" para o Formcreator</pt_BR>
+      </short>
+      <long>
+         <en>Extension for the Formcreator plugin: adds the "Dynamic Field" question type, a read-only field automatically filled from an attribute of a previous question (GLPI object or dropdown) of the same form.</en>
+         <pt_BR>Extensão para o plugin Formcreator: adiciona o tipo de questão "Campo Dinâmico", um campo somente-leitura preenchido automaticamente a partir de um atributo de uma questão anterior (objeto GLPI ou lista suspensa) do mesmo formulário.</pt_BR>
+      </long>
+   </description>
+   <homepage></homepage>
+   <authors>
+      <author>Leewan Meneses</author>
+   </authors>
+   <versions>
+      <version>
+         <num>1.0.0</num>
+         <compatibility>~10.0.0</compatibility>
+      </version>
+   </versions>
+   <langs>
+      <lang>en_GB</lang>
+      <lang>pt_BR</lang>
+   </langs>
+   <license>GPL v2+</license>
+   <tags>
+      <en>
+         <tag>formcreator</tag>
+         <tag>forms</tag>
+         <tag>dynamic</tag>
+      </en>
+      <pt_BR>
+         <tag>formcreator</tag>
+         <tag>formulários</tag>
+         <tag>dinâmico</tag>
+      </pt_BR>
+   </tags>
+   <requirements>
+      <glpi min="10.0.0" />
+      <php min="8.0.0" />
+      <plugin name="formcreator" min="2.13.0" />
+   </requirements>
+</root>

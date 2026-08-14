@@ -1,0 +1,22 @@
+/**
+ * -------------------------------------------------------------------------
+ *  GLPI Plugin "Campos Dinâmicos Formulário" (dynamicfields)
+ *  -------------------------------------------------------------------------
+ *  Minor styling of the dynamic field ("Campo Dinâmico").
+ *  -------------------------------------------------------------------------
+ *  LICENSE: GPL-2.0+
+ *  -------------------------------------------------------------------------
+ */
+
+/* The dynamic field value is read-only: use a neutral, dashed style to hint
+   it is automatically filled. */
+input.plugin-dynamicfields-value[readonly] {
+   background-color: #f5f6f7;
+   cursor: not-allowed;
+   color: #44758e;
+}
+
+/* Designer: hint shown when no compatible source question is selected yet */
+.plugin-dynamicfields-hint {
+   font-style: italic;
+}

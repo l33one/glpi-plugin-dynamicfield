@@ -1,0 +1,34 @@
+{#
+ # ---------------------------------------------------------------------
+ #  GLPI Plugin "Campos Dinâmicos Formulário" (dynamicfields)
+ #  ---------------------------------------------------------------------
+ #  Parameter "Attribute to display": dropdown of the attributes of the
+ #  itemtype managed by the selected source question. Re-rendered via AJAX
+ #  when the designer changes the source question.
+ #  ---------------------------------------------------------------------
+ #  LICENSE: GPL-2.0+
+ #  ---------------------------------------------------------------------
+#}
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+<div id="plugin_dynamicfields_attribute_parameter_{{ question_id }}">
+    {% if options is empty %}
+        <div class="row">
+            <div class="col-xxl-4"></div>
+            <div class="col-xxl-8">
+                <span class="text-muted plugin-dynamicfields-hint">{{ message }}</span>
+            </div>
+        </div>
+    {% else %}
+        {{ fields.dropdownArrayField(
+            name,
+            value,
+            options,
+            label,
+            {
+                label_class: 'col-xxl-4',
+                input_class: 'col-xxl-8',
+            }
+        ) }}
+    {% endif %}
+</div>

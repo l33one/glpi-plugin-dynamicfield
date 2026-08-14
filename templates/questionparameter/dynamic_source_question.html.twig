@@ -1,0 +1,45 @@
+{# ---------------------------------------------------------------------
+ #  GLPI Plugin "Campos Dinâmicos Formulário" (dynamicfields)
+ #  ---------------------------------------------------------------------
+ #  Parameter "Source question": dropdown of the previous compatible
+ #  questions of the form.
+ #  ---------------------------------------------------------------------
+ #  LICENSE: GPL-2.0+
+ #  ---------------------------------------------------------------------
+#}
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+{# When there is a single compatible question, preselect it so the attribute
+ # dropdown can be loaded without requiring a "change" event. #}
+{% if value is empty and options is defined and options is not empty and options|length == 1 %}
+   {% set value = options|keys|first %}
+{% endif %}
+
+<div id="plugin_dynamicfields_source_question_{{ question_id }}"
+     data-question-id="{{ question_id }}"
+     data-ajax-url="{{ ajax_url }}">
+    {{ fields.dropdownArrayField(
+        name,
+        value,
+        options,
+        label,
+        {
+            on_change: 'pluginDynamicfields_onSourceQuestionChange(this)',
+            label_class: 'col-xxl-4',
+            input_class: 'col-xxl-8',
+        }
+    ) }}
+</div>
+
+{% if value is not empty %}
+    <script type="text/javascript">
+       // Initialise the "Attribute" parameter when a source question is already
+       // selected on load (e.g. a single compatible question, so no "change"
+       // event will ever be fired).
+       $(function () {
+          if (typeof pluginDynamicfieldsInitSourceQuestion === 'function') {
+             pluginDynamicfieldsInitSourceQuestion({{ question_id }});
+          }
+       });
+    </script>
+{% endif %}
