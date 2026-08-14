@@ -120,8 +120,9 @@ class PluginDynamicfieldsHelper extends CommonDBTM
 
    /**
     * Get the list of questions of the same form that can be used as the
-    * source of a dynamic field. Only questions of type "GLPI object" or
-    * "Dropdown" placed before $questionId are returned.
+    * source of a dynamic field. All questions of type "GLPI object" or
+    * "Dropdown" of the form are returned, ordered by their visual position
+    * in the form (section order, then row, then column).
     *
     * @param int $questionId id of the dynamic field question
     * @return array source_question_id => "[Itemtype] Question name"
@@ -148,30 +149,25 @@ class PluginDynamicfieldsHelper extends CommonDBTM
       }
       $sectionIds = [];
       $sections   = (new PluginFormcreatorSection())->getSectionsFromForm($section->fields['plugin_formcreator_forms_id']);
+      $sectionOrder = [];
       foreach ($sections as $s) {
-         $sectionIds[] = $s->getID();
+         $sectionIds[]           = $s->getID();
+         $sectionOrder[$s->getID()] = count($sectionOrder);
       }
       if (count($sectionIds) === 0) {
          return $options;
       }
 
-      // A new (unsaved) question has no id yet, so there is no "previous"
-      // question to filter against: every compatible question of the form is
-      // a candidate.
-      $where = [
-         'plugin_formcreator_sections_id' => $sectionIds,
-         'fieldtype'                      => self::SOURCE_FIELDTYPES,
-      ];
-      if ($questionId > 0) {
-         $where['id'] = ['<', $questionId];
-      }
-
       $rows = $DB->request([
          'FROM'  => PluginFormcreatorQuestion::getTable(),
-         'WHERE' => $where,
+         'WHERE' => [
+            'plugin_formcreator_sections_id' => $sectionIds,
+            'fieldtype'                      => self::SOURCE_FIELDTYPES,
+         ],
          'ORDER' => 'id ASC',
       ]);
 
+      $candidates = [];
       foreach ($rows as $row) {
          $source = new PluginFormcreatorQuestion();
          $source->getFromDB($row['id']);
@@ -183,11 +179,21 @@ class PluginDynamicfieldsHelper extends CommonDBTM
             continue;
          }
          $itemtypeLabel = call_user_func([$itemtype, 'getTypeName'], 1);
-         $options[(string)$row['id']] = sprintf(
-            '[%s] %s',
-            $itemtypeLabel,
-            $row['name']
-         );
+         $candidates[$row['id']] = [
+            'label'        => sprintf('[%s] %s', $itemtypeLabel, $row['name']),
+            'sectionOrder' => (int)($sectionOrder[$row['plugin_formcreator_sections_id']] ?? 0),
+            'row'          => (int)($row['row'] ?? 0),
+            'col'          => (int)($row['col'] ?? 0),
+         ];
+      }
+
+      // Sort by visual position in the form: section order, then row, then column.
+      uasort($candidates, static function (array $a, array $b): int {
+         return [$a['sectionOrder'], $a['row'], $a['col']] <=> [$b['sectionOrder'], $b['row'], $b['col']];
+      });
+
+      foreach ($candidates as $id => $info) {
+         $options[(string)$id] = $info['label'];
       }
 
       return $options;
@@ -301,8 +307,17 @@ class PluginDynamicfieldsHelper extends CommonDBTM
          return $empty;
       }
 
-      $item = new $itemtype();
-      if (!$item->getFromDB((int)$itemsId)) {
+      $item    = new $itemtype();
+      $itemsId = (int)$itemsId;
+      if (!$item->getFromDB($itemsId)) {
+         return $empty;
+      }
+
+      // Authorization: never resolve attributes of an item the current user
+      // cannot view. items_id is fully attacker-controlled in front/ajax.php
+      // (action=get_field_value), so without this check any authenticated user
+      // could read attributes of arbitrary GLPI objects (IDOR).
+      if (method_exists($item, 'can') && !$item->can($itemsId, READ)) {
          return $empty;
       }
 
@@ -393,6 +408,28 @@ class PluginDynamicfieldsHelper extends CommonDBTM
     */
    public static function getAjaxUrl(): string {
       global $CFG_GLPI;
-      return ($CFG_GLPI['root_doc'] ?? '') . '/plugins/dynamicfields/front/ajax.php';
+
+      $url = ($CFG_GLPI['root_doc'] ?? '') . '/plugins/dynamicfields/front/ajax.php';
+
+      // Carry the CSRF token in the query string so the designer/end-user AJAX
+      // calls (front/ajax.php) can always be validated.
+      //  - GLPI 11 stores the current token in $_SESSION['_glpi_csrf_token']
+      //    and Html::checkAjaxInput() accepts it from the request.
+      //  - GLPI 10 keeps its tokens in $_SESSION['glpicsrftokens'] (map of
+      //    token => expiry) and does not attach them to AJAX GET requests;
+      //    reuse the most recent valid token without consuming it.
+      $token = '';
+      if (isset($_SESSION['_glpi_csrf_token']) && !empty($_SESSION['_glpi_csrf_token'])) {
+         $token = $_SESSION['_glpi_csrf_token'];
+      } else if (isset($_SESSION['glpicsrftokens']) && is_array($_SESSION['glpicsrftokens']) && count($_SESSION['glpicsrftokens']) > 0) {
+         $token = (string)array_key_last($_SESSION['glpicsrftokens']);
+      }
+
+      if ($token !== '') {
+         $separator = (strpos($url, '?') === false) ? '?' : '&';
+         $url .= $separator . '_glpi_csrf_token=' . rawurlencode($token);
+      }
+
+      return $url;
    }
 }

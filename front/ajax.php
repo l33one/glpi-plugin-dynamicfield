@@ -24,16 +24,22 @@ include('../../../inc/includes.php');
 
 Session::checkLoginUser();
 
-// CSRF check: use the GLPI 11 helper when available, otherwise validate the
-// token manually against the session (GLPI < 11 style).
+// CSRF check: use the GLPI 11 helper when available, otherwise follow the
+// GLPI 10 behaviour (GLPI 10 has no checkAjaxInput() and does not attach CSRF
+// tokens to AJAX GET requests — its own ajax endpoints only call
+// checkLoginUser()). When a token is supplied, validate it against the
+// session token map without consuming it, so that repeated calls from the
+// same rendered page keep working.
 if (method_exists('Html', 'checkAjaxInput')) {
    Html::checkAjaxInput();
 } else {
-   $config_token         = isset($_SESSION['_glpi_csrf_token']) ? $_SESSION['_glpi_csrf_token'] : '';
    $provided_token = $_SERVER['HTTP_X_GLPI_CSRF_TOKEN'] ?? ($_REQUEST['_glpi_csrf_token'] ?? null);
-   if (!empty($config_token) && ($provided_token === null || !hash_equals($config_token, (string)$provided_token))) {
-      http_response_code(403);
-      exit;
+   if ($provided_token !== null) {
+      $token_expires = $_SESSION['glpicsrftokens'][$provided_token] ?? 0;
+      if (!is_int($token_expires) || $token_expires < time()) {
+         http_response_code(403);
+         exit;
+      }
    }
 }
 

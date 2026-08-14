@@ -22,6 +22,14 @@
  *  -------------------------------------------------------------------------
  */
 
+// This script rewrites a file of the Formcreator plugin: it must only ever run
+// from the command line, never through the web server (which could be abused
+// to modify Formcreator source code remotely).
+if (PHP_SAPI !== 'cli') {
+   http_response_code(403);
+   exit;
+}
+
 $args = $argv ?? [];
 
 $formcreatorDir = null;
