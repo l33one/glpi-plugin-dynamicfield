@@ -68,3 +68,78 @@ msgstr "UUID ou ID é obrigatório para %1$s"
 
 msgid "Failed to add or update the %1$s"
 msgstr "Falha ao adicionar ou atualizar o %1$s"
+
+msgid "Dynamic field usage manual"
+msgstr "Manual de utilização do campo dinâmico"
+
+msgid "Adds the question type \"Dynamic field\" to Formcreator: a read-only field that is automatically filled from an attribute of a previous question (GLPI object or dropdown) of the same form."
+msgstr "Adiciona ao Formcreator o tipo de questão \"Campo Dinâmico\": um campo somente-leitura preenchido automaticamente a partir de um atributo de uma questão anterior (objeto GLPI ou lista suspensa) do mesmo formulário."
+
+msgid "Example: a ticket form asks for \"Computer\" (GLPI object question); next to it, the Dynamic field displays the location or serial number of the chosen computer -- without the user typing anything."
+msgstr "Exemplo: um formulário de chamado pede \"Computador\" (questão de objeto do GLPI); ao lado, o Campo Dinâmico exibe a localização ou o número de série do computador escolhido -- sem o usuário digitar nada."
+
+msgid "Creating a dynamic field (designer)"
+msgstr "Criando um campo dinâmico (designer)"
+
+msgid "In Form Creator > Forms, open (or create) a form and go to the designer of an item."
+msgstr "Em Form Creator > Formulários, abra (ou crie) um formulário e vá ao designer de um item."
+
+msgid "Add the item that will be the \"source\": a question of type \"GLPI object\" or \"Dropdown\", configured normally (e.g. a Computer object, with the question \"Which computer?\")."
+msgstr "Adicione o item que será a \"origem\": uma questão do tipo \"Objeto do GLPI\" ou \"Lista suspensa\", configurada normalmente (ex.: um objeto Computer, com a pergunta \"Qual computador?\")."
+
+msgid "Add another item and choose the question type \"Dynamic field\"."
+msgstr "Adicione outro item e escolha o tipo de questão \"Campo Dinâmico\"."
+
+msgid "Set its parameters: \"Source question\" and \"Attribute to display\" (see below)."
+msgstr "Defina os parâmetros: \"Questão de origem\" e \"Atributo a exibir\" (veja abaixo)."
+
+msgid "Save the form."
+msgstr "Salve o formulário."
+
+msgid "What is \"Source question\""
+msgstr "O que é \"Questão de origem\""
+
+msgid "It is the previous question of the form that \"provides\" the object. The list shows only compatible questions (GLPI object or Dropdown) located before the dynamic field, in the format:"
+msgstr "É a questão anterior do formulário que \"fornece\" o objeto. A lista mostra apenas questões compatíveis (Objeto do GLPI ou Lista suspensa) posicionadas antes do campo dinâmico, no formato:"
+
+msgid "When there is only one compatible source, it is already preselected automatically."
+msgstr "Quando existe apenas uma origem compatível, ela já vem pré-selecionada automaticamente."
+
+msgid "What is \"Attribute to display\""
+msgstr "O que é \"Atributo a exibir\""
+
+msgid "After choosing the source, choose which column of the selected item will be displayed. The options are built dynamically from the columns of the source itemtype (e.g. for Computer: name, serial, otherserial, locations_id, ...). Sensitive and system columns are removed automatically."
+msgstr "Depois de escolher a origem, escolha qual coluna do item selecionado será exibida. As opções são montadas dinamicamente a partir das colunas do tipo de item da origem (ex.: para Computer: name, serial, otherserial, locations_id, ...). Colunas sensíveis e de sistema são removidas automaticamente."
+
+msgid "Behaviour in the running form (end user)"
+msgstr "Comportamento no formulário em execução (usuário final)"
+
+msgid "When the user fills the source question (selects the computer):"
+msgstr "Quando o usuário preenche a questão de origem (seleciona o computador):"
+
+msgid "the dynamic field is filled automatically with the value of the chosen attribute;"
+msgstr "o campo dinâmico é preenchido automaticamente com o valor do atributo escolhido;"
+
+msgid "the field is read-only (it cannot be edited);"
+msgstr "o campo fica somente-leitura (não é possível editá-lo);"
+
+msgid "the value is kept if the user changes the object in the source (it is recalculated);"
+msgstr "o valor é mantido se o usuário trocar o objeto na origem (é recalculado);"
+
+msgid "on submit, the value is saved in the form answer and appears in ##FULLFORM## in the generated ticket."
+msgstr "no envio, o valor é salvo na resposta do formulário e aparece em ##FULLFORM## no ticket gerado."
+
+msgid "Limitations"
+msgstr "Limitações"
+
+msgid "The dynamic field does not work in public (anonymous) forms: filling it requires an authenticated session."
+msgstr "O campo dinâmico não funciona em formulários públicos (anônimos): o preenchimento exige sessão autenticada."
+
+msgid "The source must be a question located before the dynamic field in the form order."
+msgstr "A origem deve ser uma questão posicionada antes do campo dinâmico na ordem do formulário."
+
+msgid "Only \"GLPI object\" and \"Dropdown\" questions can be used as source."
+msgstr "Apenas questões do tipo \"Objeto do GLPI\" e \"Lista suspensa\" podem ser usadas como origem."
+
+msgid "Requires the Formcreator patch (see the README for installation)."
+msgstr "Requer o patch no Formcreator (veja o README para instalação)."

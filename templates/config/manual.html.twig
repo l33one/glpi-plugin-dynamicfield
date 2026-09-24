@@ -1,0 +1,57 @@
+{#
+ # ---------------------------------------------------------------------
+ #  GLPI Plugin "Campos Dinâmicos Formulário" (dynamicfields)
+ #  ---------------------------------------------------------------------
+ #  Usage manual displayed on the plugin configuration page.
+ #  ---------------------------------------------------------------------
+ #  LICENSE: GPL-2.0+
+ #  ---------------------------------------------------------------------
+#}
+
+<div class="mb-3">
+   <div class="card">
+      <div class="card-header">
+         <h2 class="mb-0">{{ plugin_name }} <span class="badge bg-secondary">{{ plugin_version }}</span></h2>
+      </div>
+      <div class="card-body">
+         <p>{{ intro }}</p>
+         <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i> {{ example }}
+         </div>
+      </div>
+   </div>
+</div>
+
+{% for section in sections %}
+   <div class="mb-3">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="mb-0">{{ section.title }}</h3>
+         </div>
+         <div class="card-body">
+            {% if section.text is defined %}
+               <p>{{ section.text }}</p>
+            {% endif %}
+            {% if section.steps is defined %}
+               <ul>
+                  {% for step in section.steps %}
+                     <li>{{ step }}</li>
+                  {% endfor %}
+               </ul>
+            {% endif %}
+            {% if section.example is defined %}
+               <pre class="card card-body bg-light">{{ section.example }}</pre>
+            {% endif %}
+            {% if section.note is defined %}
+               <div class="alert alert-warning py-2" role="alert">
+                  <i class="fas fa-lightbulb"></i> {{ section.note }}
+               </div>
+            {% endif %}
+         </div>
+      </div>
+   </div>
+{% endfor %}
+
+<div class="text-center text-muted my-2">
+   {{ plugin_name }} - {{ plugin_version }}
+</div>

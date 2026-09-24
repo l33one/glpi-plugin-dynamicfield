@@ -68,3 +68,78 @@ msgstr "UUID or ID is mandatory for %1$s"
 
 msgid "Failed to add or update the %1$s"
 msgstr "Failed to add or update the %1$s"
+
+msgid "Dynamic field usage manual"
+msgstr "Dynamic field usage manual"
+
+msgid "Adds the question type \"Dynamic field\" to Formcreator: a read-only field that is automatically filled from an attribute of a previous question (GLPI object or dropdown) of the same form."
+msgstr "Adds the question type \"Dynamic field\" to Formcreator: a read-only field that is automatically filled from an attribute of a previous question (GLPI object or dropdown) of the same form."
+
+msgid "Example: a ticket form asks for \"Computer\" (GLPI object question); next to it, the Dynamic field displays the location or serial number of the chosen computer -- without the user typing anything."
+msgstr "Example: a ticket form asks for \"Computer\" (GLPI object question); next to it, the Dynamic field displays the location or serial number of the chosen computer -- without the user typing anything."
+
+msgid "Creating a dynamic field (designer)"
+msgstr "Creating a dynamic field (designer)"
+
+msgid "In Form Creator > Forms, open (or create) a form and go to the designer of an item."
+msgstr "In Form Creator > Forms, open (or create) a form and go to the designer of an item."
+
+msgid "Add the item that will be the \"source\": a question of type \"GLPI object\" or \"Dropdown\", configured normally (e.g. a Computer object, with the question \"Which computer?\")."
+msgstr "Add the item that will be the \"source\": a question of type \"GLPI object\" or \"Dropdown\", configured normally (e.g. a Computer object, with the question \"Which computer?\")."
+
+msgid "Add another item and choose the question type \"Dynamic field\"."
+msgstr "Add another item and choose the question type \"Dynamic field\"."
+
+msgid "Set its parameters: \"Source question\" and \"Attribute to display\" (see below)."
+msgstr "Set its parameters: \"Source question\" and \"Attribute to display\" (see below)."
+
+msgid "Save the form."
+msgstr "Save the form."
+
+msgid "What is \"Source question\""
+msgstr "What is \"Source question\""
+
+msgid "It is the previous question of the form that \"provides\" the object. The list shows only compatible questions (GLPI object or Dropdown) located before the dynamic field, in the format:"
+msgstr "It is the previous question of the form that \"provides\" the object. The list shows only compatible questions (GLPI object or Dropdown) located before the dynamic field, in the format:"
+
+msgid "When there is only one compatible source, it is already preselected automatically."
+msgstr "When there is only one compatible source, it is already preselected automatically."
+
+msgid "What is \"Attribute to display\""
+msgstr "What is \"Attribute to display\""
+
+msgid "After choosing the source, choose which column of the selected item will be displayed. The options are built dynamically from the columns of the source itemtype (e.g. for Computer: name, serial, otherserial, locations_id, ...). Sensitive and system columns are removed automatically."
+msgstr "After choosing the source, choose which column of the selected item will be displayed. The options are built dynamically from the columns of the source itemtype (e.g. for Computer: name, serial, otherserial, locations_id, ...). Sensitive and system columns are removed automatically."
+
+msgid "Behaviour in the running form (end user)"
+msgstr "Behaviour in the running form (end user)"
+
+msgid "When the user fills the source question (selects the computer):"
+msgstr "When the user fills the source question (selects the computer):"
+
+msgid "the dynamic field is filled automatically with the value of the chosen attribute;"
+msgstr "the dynamic field is filled automatically with the value of the chosen attribute;"
+
+msgid "the field is read-only (it cannot be edited);"
+msgstr "the field is read-only (it cannot be edited);"
+
+msgid "the value is kept if the user changes the object in the source (it is recalculated);"
+msgstr "the value is kept if the user changes the object in the source (it is recalculated);"
+
+msgid "on submit, the value is saved in the form answer and appears in ##FULLFORM## in the generated ticket."
+msgstr "on submit, the value is saved in the form answer and appears in ##FULLFORM## in the generated ticket."
+
+msgid "Limitations"
+msgstr "Limitations"
+
+msgid "The dynamic field does not work in public (anonymous) forms: filling it requires an authenticated session."
+msgstr "The dynamic field does not work in public (anonymous) forms: filling it requires an authenticated session."
+
+msgid "The source must be a question located before the dynamic field in the form order."
+msgstr "The source must be a question located before the dynamic field in the form order."
+
+msgid "Only \"GLPI object\" and \"Dropdown\" questions can be used as source."
+msgstr "Only \"GLPI object\" and \"Dropdown\" questions can be used as source."
+
+msgid "Requires the Formcreator patch (see the README for installation)."
+msgstr "Requires the Formcreator patch (see the README for installation)."

@@ -46,6 +46,10 @@ function plugin_init_dynamicfields() {
    // Always register CSRF compliance so the plugin hooks can be handled
    $PLUGIN_HOOKS['csrf_compliant']['dynamicfields'] = true;
 
+   // Configuration page (usage manual) reachable from the Plugins list
+   // "Configure" button.
+   $PLUGIN_HOOKS['config_page']['dynamicfields'] = 'front/config.form.php';
+
    if (Plugin::isPluginActive('dynamicfields')
        && Plugin::isPluginActive('formcreator')) {
       // Register the new question type "Campo Dinâmico" into Formcreator.
