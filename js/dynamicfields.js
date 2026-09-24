@@ -43,7 +43,14 @@
       }
 
       if (!sourceQuestionId) {
+         // Keep the parameter present in the submitted form
+         // (_parameters[fieldtype][param] is mandatory for Formcreator).
          $container.empty();
+         $container.append($('<input>', {
+            type: 'hidden',
+            name: $container.data('param-name'),
+            value: ''
+         }));
          return;
       }
 
@@ -60,7 +67,13 @@
             $container.replaceWith(html);
          },
          error: function () {
+            // Keep the parameter present so the question can still be saved.
             $container.empty();
+            $container.append($('<input>', {
+               type: 'hidden',
+               name: $container.data('param-name'),
+               value: ''
+            }));
          }
       });
    };

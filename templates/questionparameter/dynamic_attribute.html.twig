@@ -11,8 +11,15 @@
 #}
 {% import 'components/form/fields_macros.html.twig' as fields %}
 
-<div id="plugin_dynamicfields_attribute_parameter_{{ question_id }}">
+<div id="plugin_dynamicfields_attribute_parameter_{{ question_id }}"
+     data-param-name="{{ name }}">
     {% if options is empty %}
+        {# Formcreator requires every question parameter to be present in the
+           submitted form (_parameters[fieldtype][param]). When the list of
+           attributes is empty (no source question selected yet, or the
+           itemtype exposes no displayable attribute), submit the parameter
+           as a hidden input so the question can still be saved. #}
+        <input type="hidden" name="{{ name }}" value="{{ value }}">
         <div class="row">
             <div class="col-xxl-4"></div>
             <div class="col-xxl-8">
