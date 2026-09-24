@@ -42,6 +42,13 @@
          return;
       }
 
+      // The designer form has a single "fieldtype" select. When editing an
+      // existing question and changing its type to this one, the question in
+      // the DB still holds the OLD type, so force the current fieldtype to
+      // make sure the parameter is rendered as _parameters[dynamic][...].
+      var $fieldtype = $select.closest('form').find('select[name="fieldtype"]');
+      var fieldtype = $fieldtype.length ? $fieldtype.val() : 'dynamic';
+
       if (!sourceQuestionId) {
          // Keep the parameter present in the submitted form
          // (_parameters[fieldtype][param] is mandatory for Formcreator).
@@ -60,7 +67,8 @@
          data: {
             action: 'get_attributes',
             source_question_id: sourceQuestionId,
-            question_id: questionId
+            question_id: questionId,
+            fieldtype: fieldtype
          },
          dataType: 'html',
          success: function (html) {

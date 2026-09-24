@@ -87,15 +87,19 @@ function getAttributes() {
       exit;
    }
 
-   // The question may not be saved yet (new question in the designer): in that
-   // case question_id is 0 and we build a lightweight object carrying the
-   // fieldtype so the parameter can be rendered.
+   // The designer may be editing an existing question whose type was just
+   // changed to "dynamic" but not saved yet: the question loaded from the DB
+   // still has its OLD fieldtype. The parameters must be rendered under the
+   // CURRENT designer fieldtype (which is always "dynamic" for this plugin),
+   // otherwise the name would be _parameters[oldtype][attribute] and the save
+   // would be rejected by Formcreator's checkBeforeSave().
    if ($questionId > 0) {
       $question = new PluginFormcreatorQuestion();
       if (!$question->getFromDB($questionId)) {
          http_response_code(404);
          exit;
       }
+      $question->fields['fieldtype'] = $_REQUEST['fieldtype'] ?? 'dynamic';
    } else {
       $question = new PluginFormcreatorQuestion();
       $question->getEmpty();
