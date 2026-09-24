@@ -159,7 +159,7 @@ extends PluginFormcreatorAbstractQuestionParameter
       global $DB;
 
       if (!isset($input['uuid']) && !isset($input['id'])) {
-         throw new ImportFailureException(sprintf('UUID or ID is mandatory for %1$s', static::getTypeName(1)));
+         throw new ImportFailureException(sprintf(__('UUID or ID is mandatory for %1$s', 'dynamicfields'), static::getTypeName(1)));
       }
 
       $questionFk = PluginFormcreatorQuestion::getForeignKeyField();
@@ -196,7 +196,7 @@ extends PluginFormcreatorAbstractQuestionParameter
          $itemId = $item->add($input);
       }
       if ($itemId === false) {
-         throw new ImportFailureException(sprintf('Failed to add or update the %1$s', static::getTypeName(1)));
+         throw new ImportFailureException(sprintf(__('Failed to add or update the %1$s', 'dynamicfields'), static::getTypeName(1)));
       }
 
       $linker->addObject($originalId, $item);
