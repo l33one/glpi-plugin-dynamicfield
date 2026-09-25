@@ -29,6 +29,16 @@ function plugin_dynamicfields_install() {
 
    $migration = new Migration(PLUGIN_DYNAMICFIELDS_VERSION);
 
+   // GLPI 11 deprecates DBmysql::query() (throws "Executing direct queries is
+   // not allowed!"); GLPI 10.0.11+ exposes doQuery(). Keep a fallback for old
+   // 10.0.x where doQuery() does not exist yet.
+   $runQuery = static function (string $sql) use ($DB): void {
+      $result = method_exists($DB, 'doQuery') ? $DB->doQuery($sql) : $DB->query($sql);
+      if ($result === false || $result === null) {
+         die($DB->error());
+      }
+   };
+
    $tables = [
       'glpi_plugin_dynamicfields_sourcequestionparameters',
       'glpi_plugin_dynamicfields_attributeparameters',
@@ -44,7 +54,7 @@ function plugin_dynamicfields_install() {
             `uuid`                            varchar(80) DEFAULT '',
             PRIMARY KEY (`id`)
          ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;";
-         $DB->query($query) or die($DB->error());
+         $runQuery($query);
       }
       $migration->addKey($table, 'plugin_formcreator_questions_id');
       $migration->addKey($table, ['plugin_formcreator_questions_id', 'fieldname']);
@@ -66,12 +76,19 @@ function plugin_dynamicfields_install() {
 function plugin_dynamicfields_uninstall() {
    global $DB;
 
+   $runQuery = static function (string $sql) use ($DB): void {
+      $result = method_exists($DB, 'doQuery') ? $DB->doQuery($sql) : $DB->query($sql);
+      if ($result === false || $result === null) {
+         die($DB->error());
+      }
+   };
+
    foreach ([
       'glpi_plugin_dynamicfields_sourcequestionparameters',
       'glpi_plugin_dynamicfields_attributeparameters',
    ] as $table) {
       if ($DB->tableExists($table)) {
-         $DB->query("DROP TABLE `$table`;");
+         $runQuery("DROP TABLE `$table`;");
       }
    }
 
