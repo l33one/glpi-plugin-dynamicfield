@@ -2,56 +2,84 @@
  # ---------------------------------------------------------------------
  #  GLPI Plugin "Campos Dinâmicos Formulário" (dynamicfields)
  #  ---------------------------------------------------------------------
- #  Usage manual displayed on the plugin configuration page.
+ #  Visual guide shown on the plugin configuration page.
  #  ---------------------------------------------------------------------
  #  LICENSE: GPL-2.0+
  #  ---------------------------------------------------------------------
 #}
 
-<div class="mb-3">
-   <div class="card">
-      <div class="card-header">
-         <h2 class="mb-0">{{ plugin_name }} <span class="badge bg-secondary">{{ plugin_version }}</span></h2>
-      </div>
-      <div class="card-body">
-         <p>{{ intro }}</p>
-         <div class="alert alert-info" role="alert">
-            <i class="fas fa-info-circle"></i> {{ example }}
+<div class="df-page">
+
+   {# ---------- Hero: description + concept diagram ---------- #}
+   <div class="df-hero">
+      <div class="df-hero__main">
+         <span class="df-eyebrow">GLPI + Formcreator</span>
+         <h1 class="df-hero__title">{{ plugin_name }} <span class="df-badge">{{ plugin_version }}</span></h1>
+         <p class="df-hero__desc">{{ description }}</p>
+         <div class="df-example">
+            <i class="fas fa-lightbulb"></i>
+            <span>{{ example }}</span>
          </div>
+      </div>
+      <figure class="df-figure df-figure--hero">
+         <img src="{{ images_dir }}/hero-diagram.png" alt="{{ description }}" />
+      </figure>
+   </div>
+
+   {# ---------- Runtime preview ---------- #}
+   <div class="df-preview">
+      <figure class="df-figure">
+         <img src="{{ images_dir }}/{{ runtime.image }}" alt="{{ runtime.caption }}" />
+      </figure>
+      <div class="df-preview__note">
+         <span class="df-ico df-ico--green"><i class="{{ runtime.icon }}"></i></span>
+         <p>{{ runtime.caption }}</p>
       </div>
    </div>
-</div>
 
-{% for section in sections %}
-   <div class="mb-3">
-      <div class="card">
-         <div class="card-header">
-            <h3 class="mb-0">{{ section.title }}</h3>
+   {# ---------- Sections ---------- #}
+   {% for section in sections %}
+      <section class="df-card df-card--{{ section.tone }}{{ loop.index is even and section.image is defined ? ' df-card--flip' : '' }}">
+         <header class="df-card__head">
+            <span class="df-ico df-ico--{{ section.tone }}"><i class="{{ section.icon }}"></i></span>
+            <h2>{{ section.title }}</h2>
+         </header>
+         <div class="df-card__body">
+            <div class="df-card__content">
+               {% if section.text is defined %}
+                  <p>{{ section.text }}</p>
+               {% endif %}
+               {% if section.steps is defined %}
+                  <ol class="df-steps">
+                     {% for step in section.steps %}
+                        <li><span class="df-step">{{ loop.index }}</span><span>{{ step }}</span></li>
+                     {% endfor %}
+                  </ol>
+               {% endif %}
+               {% if section.example is defined %}
+                  <code class="df-pill">{{ section.example }}</code>
+               {% endif %}
+               {% if section.note is defined %}
+                  <div class="df-note">
+                     <i class="fas fa-lightbulb"></i>
+                     <span>{{ section.note }}</span>
+                  </div>
+               {% endif %}
+            </div>
+            {% if section.image is defined %}
+               <figure class="df-figure">
+                  <img src="{{ images_dir }}/{{ section.image }}" alt="{{ section.caption }}" />
+                  {% if section.caption is defined %}
+                     <figcaption>{{ section.caption }}</figcaption>
+                  {% endif %}
+               </figure>
+            {% endif %}
          </div>
-         <div class="card-body">
-            {% if section.text is defined %}
-               <p>{{ section.text }}</p>
-            {% endif %}
-            {% if section.steps is defined %}
-               <ul>
-                  {% for step in section.steps %}
-                     <li>{{ step }}</li>
-                  {% endfor %}
-               </ul>
-            {% endif %}
-            {% if section.example is defined %}
-               <pre class="card card-body bg-light">{{ section.example }}</pre>
-            {% endif %}
-            {% if section.note is defined %}
-               <div class="alert alert-warning py-2" role="alert">
-                  <i class="fas fa-lightbulb"></i> {{ section.note }}
-               </div>
-            {% endif %}
-         </div>
-      </div>
-   </div>
-{% endfor %}
+      </section>
+   {% endfor %}
 
-<div class="text-center text-muted my-2">
-   {{ plugin_name }} - {{ plugin_version }}
+   <footer class="df-footer">
+      {{ plugin_name }} - {{ plugin_version }} &middot; GPL-2.0-or-later
+   </footer>
+
 </div>

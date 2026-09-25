@@ -72,8 +72,8 @@ msgstr "Falha ao adicionar ou atualizar o %1$s"
 msgid "Dynamic field usage manual"
 msgstr "Manual de utilização do campo dinâmico"
 
-msgid "Adds the question type \"Dynamic field\" to Formcreator: a read-only field that is automatically filled from an attribute of a previous question (GLPI object or dropdown) of the same form."
-msgstr "Adiciona ao Formcreator o tipo de questão \"Campo Dinâmico\": um campo somente-leitura preenchido automaticamente a partir de um atributo de uma questão anterior (objeto GLPI ou lista suspensa) do mesmo formulário."
+msgid "Extension for the Formcreator plugin. It adds the \"Dynamic field\" question type: a read-only field that is filled automatically from an attribute of a previous question (GLPI object or dropdown) of the same form."
+msgstr "Extensão para o plugin Formcreator. Adiciona o tipo de questão \"Campo Dinâmico\": um campo somente-leitura que é preenchido automaticamente a partir de um atributo de uma questão anterior (objeto GLPI ou lista suspensa) do mesmo formulário."
 
 msgid "Example: a ticket form asks for \"Computer\" (GLPI object question); next to it, the Dynamic field displays the location or serial number of the chosen computer -- without the user typing anything."
 msgstr "Exemplo: um formulário de chamado pede \"Computador\" (questão de objeto do GLPI); ao lado, o Campo Dinâmico exibe a localização ou o número de série do computador escolhido -- sem o usuário digitar nada."
@@ -111,23 +111,20 @@ msgstr "O que é \"Atributo a exibir\""
 msgid "After choosing the source, choose which column of the selected item will be displayed. The options are built dynamically from the columns of the source itemtype (e.g. for Computer: name, serial, otherserial, locations_id, ...). Sensitive and system columns are removed automatically."
 msgstr "Depois de escolher a origem, escolha qual coluna do item selecionado será exibida. As opções são montadas dinamicamente a partir das colunas do tipo de item da origem (ex.: para Computer: name, serial, otherserial, locations_id, ...). Colunas sensíveis e de sistema são removidas automaticamente."
 
-msgid "Behaviour in the running form (end user)"
-msgstr "Comportamento no formulário em execução (usuário final)"
+msgid "In the final form, the value is filled in automatically and the field is read-only."
+msgstr "No formulário final, o valor é preenchido automaticamente e o campo fica somente-leitura."
 
-msgid "When the user fills the source question (selects the computer):"
-msgstr "Quando o usuário preenche a questão de origem (seleciona o computador):"
+msgid "Adding a question with the \"Dynamic field\" type in the Formcreator designer."
+msgstr "Adicionando uma pergunta do tipo \"Campo Dinâmico\" no designer do Formcreator."
 
-msgid "the dynamic field is filled automatically with the value of the chosen attribute;"
-msgstr "o campo dinâmico é preenchido automaticamente com o valor do atributo escolhido;"
+msgid "The \"Source question\" parameter lists the previous compatible questions."
+msgstr "O parâmetro \"Questão de origem\" lista as perguntas anteriores compatíveis."
 
-msgid "the field is read-only (it cannot be edited);"
-msgstr "o campo fica somente-leitura (não é possível editá-lo);"
+msgid "The \"Attribute to display\" parameter lists the columns of the source item type."
+msgstr "O parâmetro \"Atributo a exibir\" lista as colunas do tipo de item de origem."
 
-msgid "the value is kept if the user changes the object in the source (it is recalculated);"
-msgstr "o valor é mantido se o usuário trocar o objeto na origem (é recalculado);"
-
-msgid "on submit, the value is saved in the form answer and appears in ##FULLFORM## in the generated ticket."
-msgstr "no envio, o valor é salvo na resposta do formulário e aparece em ##FULLFORM## no ticket gerado."
+msgid "The source question must be above the dynamic field; a source below it is ignored."
+msgstr "A pergunta de origem deve ficar acima do campo dinâmico; uma origem abaixo é ignorada."
 
 msgid "Limitations"
 msgstr "Limitações"
