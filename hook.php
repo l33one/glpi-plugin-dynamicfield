@@ -35,7 +35,8 @@ function plugin_dynamicfields_install() {
    $runQuery = static function (string $sql) use ($DB): void {
       $result = method_exists($DB, 'doQuery') ? $DB->doQuery($sql) : $DB->query($sql);
       if ($result === false || $result === null) {
-         die($DB->error());
+         Toolbox::logInFile('php-errors.log', sprintf("Dynamicfields DB error: %s\nQuery: %s\n", $DB->error(), $sql));
+         throw new \RuntimeException('Database error during plugin operation: ' . $DB->error());
       }
    };
 
@@ -79,7 +80,8 @@ function plugin_dynamicfields_uninstall() {
    $runQuery = static function (string $sql) use ($DB): void {
       $result = method_exists($DB, 'doQuery') ? $DB->doQuery($sql) : $DB->query($sql);
       if ($result === false || $result === null) {
-         die($DB->error());
+         Toolbox::logInFile('php-errors.log', sprintf("Dynamicfields DB error: %s\nQuery: %s\n", $DB->error(), $sql));
+         throw new \RuntimeException('Database error during plugin operation: ' . $DB->error());
       }
    };
 

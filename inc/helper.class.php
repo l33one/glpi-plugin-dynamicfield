@@ -37,6 +37,11 @@ class PluginDynamicfieldsHelper extends CommonDBTM
       'session_token',
       'glpiauthsecret',
       'pin',
+      'personal_token',
+      'authtoken',
+      'auth_token',
+      'sync_token',
+      'user_token',
    ];
 
    /**
@@ -60,63 +65,6 @@ class PluginDynamicfieldsHelper extends CommonDBTM
     * @var array
     */
    const SOURCE_FIELDTYPES = ['glpiselect', 'dropdown'];
-
-   /**
-    * Make an AJAX GET request (interface parity with PluginFormcreatorCommon,
-    * kept for convenience).
-    *
-    * @param string $url       absolute URL to the ajax endpoint
-    * @param array  $params    query string parameters
-    * @param bool   $progressive_loading ignored, kept for interface parity
-    * @return array \{'content' => string, 'http_error' => int, 'title' => string\}
-    */
-   public static function getAjaxComponent(string $url, array $params = [], bool $progressive_loading = false): array {
-      $args = '';
-      if (count($params) > 0) {
-         $args = '?';
-         $args .= implode(
-            '&',
-            array_map(
-               function ($key) use ($params) {
-                  return $key . '=' . rawurlencode($params[$key]);
-               },
-               array_keys($params)
-            )
-         );
-      }
-
-      $content  = "";
-      $httpCode = 0;
-      if (isset($_SESSION['glpiID'])) {
-         $content = Html::clean(
-            Ajax::getUrl('', $url . $args, urldecode($url))
-         );
-         $httpCode = 200;
-      } else {
-         $opts = [
-            'http' => [
-               'ignore_errors' => true,
-               'method'        => 'GET',
-            ],
-         ];
-         $ctx = stream_context_create($opts);
-         $content = @file_get_contents($url . $args, false, $ctx);
-         if (isset($http_response_header[0])) {
-            if (preg_match('/\s(\d{3})\s/', $http_response_header[0], $m)) {
-               $httpCode = (int)$m[1];
-            }
-         }
-         if ($httpCode === 0) {
-            $httpCode = 200;
-         }
-      }
-
-      return [
-         'content'    => (string)$content,
-         'http_error' => $httpCode,
-         'title'      => "",
-      ];
-   }
 
    /**
     * Get the list of questions of the same form that can be used as the
@@ -320,9 +268,17 @@ class PluginDynamicfieldsHelper extends CommonDBTM
       if (method_exists($item, 'can') && !$item->can($itemsId, READ)) {
          return $empty;
       }
+      if (method_exists($item, 'canViewItem') && !$item->canViewItem()) {
+         return $empty;
+      }
 
       $attribute = strtolower(trim($attribute));
-      if ($attribute === '') {
+      if ($attribute === '' || !preg_match('/^[a-z0-9_]+$/', $attribute)) {
+         return $empty;
+      }
+
+      // Defense-in-depth: never disclose sensitive or system columns
+      if (in_array($attribute, self::SENSITIVE_COLUMNS) || in_array($attribute, self::SYSTEM_COLUMNS)) {
          return $empty;
       }
 

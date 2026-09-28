@@ -277,7 +277,8 @@ extends PluginFormcreatorAbstractField
    }
 
    public function regex($value): bool {
-      return (preg_match($value, (string)$this->value)) ? true : false;
+      $match = @preg_match($value, (string)$this->value);
+      return ($match !== false && $match > 0);
    }
 
    public function getHtmlIcon() {

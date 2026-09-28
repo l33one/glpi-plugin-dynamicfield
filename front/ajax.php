@@ -68,7 +68,9 @@ switch ($action) {
  * designer changes the source question.
  */
 function getAttributes() {
-   Session::checkRight('entity', UPDATE);
+   if (!Session::haveRight('entity', UPDATE) && !Session::haveRight('plugin_formcreator_form', UPDATE)) {
+      Session::checkRight('entity', UPDATE);
+   }
 
    $sourceQuestionId = (int)($_REQUEST['source_question_id'] ?? 0);
    $questionId       = (int)($_REQUEST['question_id'] ?? 0);
@@ -78,7 +80,7 @@ function getAttributes() {
    }
 
    $source = new PluginFormcreatorQuestion();
-   if (!$source->getFromDB($sourceQuestionId)) {
+   if (!$source->getFromDB($sourceQuestionId) || (method_exists($source, 'canViewItem') && !$source->canViewItem())) {
       http_response_code(404);
       exit;
    }
@@ -86,6 +88,10 @@ function getAttributes() {
       http_response_code(400);
       exit;
    }
+
+   // Validate fieldtype parameter (only alphanumeric and underscores allowed)
+   $rawFieldtype = (string)($_REQUEST['fieldtype'] ?? 'dynamic');
+   $fieldtype = preg_match('/^[a-z0-9_]+$/i', $rawFieldtype) ? $rawFieldtype : 'dynamic';
 
    // The designer may be editing an existing question whose type was just
    // changed to "dynamic" but not saved yet: the question loaded from the DB
@@ -95,15 +101,15 @@ function getAttributes() {
    // would be rejected by Formcreator's checkBeforeSave().
    if ($questionId > 0) {
       $question = new PluginFormcreatorQuestion();
-      if (!$question->getFromDB($questionId)) {
+      if (!$question->getFromDB($questionId) || (method_exists($question, 'canViewItem') && !$question->canViewItem())) {
          http_response_code(404);
          exit;
       }
-      $question->fields['fieldtype'] = $_REQUEST['fieldtype'] ?? 'dynamic';
+      $question->fields['fieldtype'] = $fieldtype;
    } else {
       $question = new PluginFormcreatorQuestion();
       $question->getEmpty();
-      $question->fields['fieldtype'] = $_REQUEST['fieldtype'] ?? 'dynamic';
+      $question->fields['fieldtype'] = $fieldtype;
    }
 
    // Keep the currently saved attribute as the selected value
@@ -130,9 +136,9 @@ function getAttributes() {
 function getFieldValue() {
    $sourceQuestionId = (int)($_REQUEST['source_question_id'] ?? 0);
    $itemsId          = $_REQUEST['items_id'] ?? '';
-   $attribute        = (string)($_REQUEST['attribute'] ?? '');
+   $attribute        = strtolower(trim((string)($_REQUEST['attribute'] ?? '')));
 
-   if ($sourceQuestionId <= 0) {
+   if ($sourceQuestionId <= 0 || !preg_match('/^[a-z0-9_]+$/', $attribute)) {
       http_response_code(400);
       exit;
    }
@@ -140,7 +146,7 @@ function getFieldValue() {
    $result = ['value' => '', 'display' => ''];
 
    $source = new PluginFormcreatorQuestion();
-   if ($source->getFromDB($sourceQuestionId)) {
+   if ($source->getFromDB($sourceQuestionId) && (!method_exists($source, 'canViewItem') || $source->canViewItem())) {
       if (in_array($source->fields['fieldtype'], PluginDynamicfieldsHelper::SOURCE_FIELDTYPES)) {
          $itemtype = PluginDynamicfieldsHelper::getItemtypeForQuestion($source);
          $attributes = PluginDynamicfieldsHelper::getAttributesForItemtype($itemtype);

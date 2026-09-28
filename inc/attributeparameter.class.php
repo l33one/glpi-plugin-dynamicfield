@@ -183,9 +183,7 @@ extends PluginFormcreatorAbstractQuestionParameter
          );
       }
 
-      if (isset($input['values'])) {
-         $input['values'] = $DB->escape($input['values']);
-      }
+      // CommonDBTM::add() and update() handle escaping automatically
 
       $originalId = $input[$idKey];
       if ($itemId !== false) {

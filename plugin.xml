@@ -1,19 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <root>
    <name>Campos Dinâmicos Formulário</name>
    <key>dynamicfields</key>
    <state>stable</state>
+   <logo>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/hero-diagram.png</logo>
    <description>
       <short>
-         <en>Dynamic field question type for Formcreator</en>
-         <pt_BR>Tipo de questão "Campo Dinâmico" para o Formcreator</pt_BR>
+         <en>Dynamic field question type for GLPI Formcreator</en>
+         <pt_BR>Tipo de questão "Campo Dinâmico" para o GLPI Formcreator</pt_BR>
       </short>
       <long>
-         <en>Extension for the Formcreator plugin: adds the "Dynamic Field" question type, a read-only field automatically filled from an attribute of a previous question (GLPI object or dropdown) of the same form.</en>
-         <pt_BR>Extensão para o plugin Formcreator: adiciona o tipo de questão "Campo Dinâmico", um campo somente-leitura preenchido automaticamente a partir de um atributo de uma questão anterior (objeto GLPI ou lista suspensa) do mesmo formulário.</pt_BR>
+         <en>Extension for the GLPI Formcreator plugin: adds the "Dynamic Field" question type, a read-only field automatically filled in real time from an attribute of a previous question (GLPI object or dropdown) in the same form.</en>
+         <pt_BR>Extensão para o plugin GLPI Formcreator: adiciona o tipo de questão "Campo Dinâmico", um campo somente-leitura preenchido automaticamente em tempo real a partir de um atributo de uma questão anterior (objeto GLPI ou lista suspensa) do mesmo formulário.</pt_BR>
       </long>
    </description>
-   <homepage></homepage>
+   <homepage>https://github.com/l33one/glpi-plugin-dynamicfield</homepage>
+   <download>https://github.com/l33one/glpi-plugin-dynamicfield/releases</download>
+   <issues>https://github.com/l33one/glpi-plugin-dynamicfield/issues</issues>
+   <readme>https://github.com/l33one/glpi-plugin-dynamicfield/blob/master/README.md</readme>
+   <changelog>https://github.com/l33one/glpi-plugin-dynamicfield/releases</changelog>
    <authors>
       <author>Leewan Meneses</author>
    </authors>
@@ -21,6 +26,7 @@
       <version>
          <num>1.0.0</num>
          <compatibility>~10.0.0</compatibility>
+         <download_url>https://github.com/l33one/glpi-plugin-dynamicfield/releases/download/1.0.0/dynamicfields-1.0.0.tar.gz</download_url>
       </version>
    </versions>
    <langs>
@@ -33,16 +39,21 @@
          <tag>formcreator</tag>
          <tag>forms</tag>
          <tag>dynamic</tag>
+         <tag>fields</tag>
       </en>
       <pt_BR>
          <tag>formcreator</tag>
          <tag>formulários</tag>
          <tag>dinâmico</tag>
+         <tag>campos</tag>
       </pt_BR>
    </tags>
-   <requirements>
-      <glpi min="10.0.0" />
-      <php min="8.0.0" />
-      <plugin name="formcreator" min="2.13.0" />
-   </requirements>
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/hero-diagram.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/designer.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/source.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/attribute.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/order.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/l33one/glpi-plugin-dynamicfield/master/public/templates/config/images/runtime.png</screenshot>
+   </screenshots>
 </root>
