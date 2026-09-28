@@ -190,11 +190,11 @@ Componentes principais:
 dynamicfields/
 ├── setup.php                        # declaração, requisitos e hooks do plugin
 ├── hook.php                         # install/uninstall (tabelas) + registro do tipo "dynamic"
-├── plugin.xml                       # metadados para o marketplace do GLPI
+├── dynamicfields.xml                # metadados para o marketplace do GLPI
 ├── README.md                        # este documento
 ├── locales/
-│   ├── pt_BR.php                    # português do Brasil
-│   └── en_GB.php                    # inglês (padrão)
+│   ├── pt_BR.po / pt_BR.mo          # português do Brasil
+│   └── en_GB.po / en_GB.mo          # inglês (padrão)
 ├── inc/
 │   ├── field.class.php              # PluginDynamicfieldsField (tipo de questão)
 │   ├── helper.class.php             # PluginDynamicfieldsHelper (fontes, atributos, resolução)
